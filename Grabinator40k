@@ -1,14 +1,11 @@
 Import-Module PSFTP
 # Modify $filename and $target if necessary
 $filename = "Active_warrants_report.csv"
-$target = "E:\FlatFiles\$filename"
+$target = "C:\Users\isgeolac\Documents\psscripts\ftp\$filename"
+$ftpurl = "ftp://ocftp.oklahomacounty.org"
 $username = "sqlgit"
 $pass = "sqlgit2020"
 $password = $pass | ConvertTo-SecureString -asPlainText -Force
 $credentials = New-Object System.Management.Automation.PSCredential($username, $password)
-Set-FTPConnection -Credentials $credentials -Server ftp://ocftp.oklahomacounty.org -Session $Session -UsePassive
-$Session = Get-FTPConnection -Session $Session
-Get-FTPItem -Session $Session -Path /
-$filename | Out-File $target
-# Comment out line below to not delete file on 
-# Get-FTPChildItem -Session $Session -Path / -Filter *.csv | Remove-FTPItem -Session $Session
+Set-FTPConnection -Credentials $credentials -Server $ftpurl -UsePassive
+Get-FTPItem -Path /$filename -LocalPath $target -Overwrite
